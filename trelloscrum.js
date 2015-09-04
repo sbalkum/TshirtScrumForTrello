@@ -43,7 +43,9 @@ var debounce = function (func, threshold, execAsap) {
 var obsConfig = { childList: true, characterData: true, attributes: false, subtree: true };
 
 //default story point picker sequence (can be overridden in the Scrum for Trello 'Settings' popup)
-var _pointSeq = ['?', 0, .5, 1, 2, 3, 5, 8, 13, 21];
+//var _pointSeq = ['?', 0, .5, 1, 2, 3, 5, 8, 13, 21];
+var _pointSeq = ['?', 'XS', 'S', 'M', 'L', 'XL', 'XXL'];
+var _pointSeqValues = [ 0, 1, 5, 12, 30, 70, 150];
 //attributes representing points values for card
 var _pointsAttr = ['cpoints', 'points'];
 
@@ -58,9 +60,8 @@ S4T_SETTING_DEFAULTS[SETTING_NAME_ESTIMATES] = _pointSeq.join();
 refreshSettings(); // get the settings right away (may take a little bit if using Chrome cloud storage)
 
 //internals
-var reg = /((?:^|\s))\((\x3f|\d*\.?\d+)(\))\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by ()
-    regC = /((?:^|\s))\[(\x3f|\d*\.?\d+)(\])\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by []
-    iconUrl, pointsDoneUrl,
+var reg = /((?:^|\s))\{(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\})\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by {}
+    regC = /((?:^|\s))\|(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\|)\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by ||    iconUrl, pointsDoneUrl,
 	flameUrl, flame18Url,
 	scrumLogoUrl, scrumLogo18Url;
 if(typeof chrome !== 'undefined'){
@@ -581,6 +582,7 @@ function ListCard(el, identifier){
 	el.listCard[identifier]=this;
 
 	var points=-1,
+		pointsToDisplay='',
 		consumed=identifier!=='points',
 		regexp=consumed?regC:reg,
 		parsed,
@@ -613,19 +615,30 @@ function ListCard(el, identifier){
 			if(titleTextContent != parsedTitle){
 				// New card title, so we have to parse this new info to find the new amount of points.
 				parsed=titleTextContent.match(regexp);
-				points=parsed?parsed[2]:-1;
 			} else {
 				// Title text has already been parsed... process the pre-parsed title to get the correct points.
 				var origTitle = $title.data('orig-title');
 				parsed=origTitle.match(regexp);
-				points=parsed?parsed[2]:-1;
+			}
+			points = -1;
+			if(parsed) {
+				if(isNumber(parsed[2])) {
+					points=parsed[2];
+					pointsToDisplay = parsed[2];
+				} else {
+					var ptIndex = _pointSeq.indexOf(parsed[2]);
+					if(ptIndex != -1) {
+						points = _pointSeqValues[ptIndex];
+						pointsToDisplay = parsed[2];
+					}
+				}
 			}
 
 			clearTimeout(to2);
 			to2 = setTimeout(function(){
 				// Add the badge (for this point-type: regular or consumed) to the badges div.
 				$badge
-					.text(that.points)
+					.text(that.pointsToDisplay)
 					[(consumed?'add':'remove')+'Class']('consumed')
 					.attr({title: 'This card has '+that.points+ (consumed?' consumed':'')+' storypoint' + (that.points == 1 ? '.' : 's.')})
 					.prependTo($card.find('.badges'));
@@ -653,6 +666,10 @@ function ListCard(el, identifier){
 
 	this.__defineGetter__('points',function(){
 		return parsed?points:''
+	});
+
+	this.__defineGetter__('pointsToDisplay',function(){
+		return pointsToDisplay?pointsToDisplay:''
 	});
 
 	var cardShortIdObserver = new CrossBrowser.MutationObserver(function(mutations){
@@ -704,7 +721,7 @@ function showPointPicker(location) {
 		var text = $text.val();
 
 		// replace our new
-		$text[0].value=text.match(reg)?text.replace(reg, '('+value+') '):'('+value+') ' + text;
+		$text[0].value=text.match(reg)?text.replace(reg, '{'+value+'} '):'{'+value+'} ' + text;
 
 		// then click our button so it all gets saved away
 		$(".card-detail-title .edit .js-save-edit").click();
@@ -723,7 +740,7 @@ function showPointPicker(location) {
 		var text = $text.val();
 
 		// replace our new
-		$text[0].value=text.match(regC)?text.replace(regC, ' ['+value+']'):text + ' ['+value+']';
+		$text[0].value=text.match(regC)?text.replace(regC, ' |'+value+'|'):text + ' |'+value+'|';
 
 		// then click our button so it all gets saved away
 		$(".card-detail-title .edit .js-save-edit").click();
@@ -921,3 +938,7 @@ function getCookie(c_name, defaultValue){
 	}
 	return c_value;
 }; // end getCookie()
+
+function isNumber(text) {
+	return !isNaN(Number(text));
+}

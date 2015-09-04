@@ -1,3 +1,12 @@
+T-shirt Scrum for Trello
+===========
+
+This is a fork of [Q42](http://q42.com)'s Chrome extension that uses T-shirt sizing rather than the
+Fibonacci series. This is based on experience blogged at [stephenbalkum.com](http://www.stephenbalkum.com/archive/2014/08/18/what-metrics-to-collect-in-a-scrum-sprint-cycle/).
+
+Also, the size delimiters have been changed to {} and || since parentheses and brackets are
+frequently used in titles.
+
 Scrum for Trello
 ===========
 
