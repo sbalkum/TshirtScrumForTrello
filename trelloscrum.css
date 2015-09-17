@@ -1,7 +1,6 @@
 .list-total {
 	color: #006580;
 	font-size: 16px;
-	font-weight: bold;
 	float: right;
 	margin: 1px 0px 0 0;
 	line-height:18px;
@@ -13,7 +12,8 @@
 
 .list-total .cpoints{
 	margin-right:3px;
-	opacity: 0.5;
+	color: #806500 !important;
+	font-weight: bold;
 }
 
 .list .list-title h2 {
@@ -77,7 +77,7 @@
 }
 
 .badge-points.consumed{
-	opacity: 0.5;
+	background-color: #806500 !important;
 }
 .badge:empty{ display:none !important; }
 
