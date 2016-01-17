@@ -60,8 +60,9 @@ S4T_SETTING_DEFAULTS[SETTING_NAME_ESTIMATES] = _pointSeq.join();
 refreshSettings(); // get the settings right away (may take a little bit if using Chrome cloud storage)
 
 //internals
-var reg = /((?:^|\s))\{(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\})\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by {}
-    regC = /((?:^|\s))\|(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\|)\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by ||    iconUrl, pointsDoneUrl,
+var reg = /((?:^|\s?))\{(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\})\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by {}
+    regC = /((?:^|\s?))\|(\x3f|\d*\.?\d+|XS|S|M|L|XL|XXL)(\|)\s?/m, //parse regexp- accepts digits, decimals and '?', surrounded by ||
+    iconUrl, pointsDoneUrl,
 	flameUrl, flame18Url,
 	scrumLogoUrl, scrumLogo18Url;
 // FIREFOX_BEGIN_REMOVE
