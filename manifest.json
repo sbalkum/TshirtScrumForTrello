@@ -1,6 +1,6 @@
 {
 	"name": "T-shirt Scrum for Trello",
-	"version": "1.96.3",
+	"version": "1.97.1",
 	"description": "Adds T-shirt sizing for Scrum to your Trello",
 	"content_scripts": [
 		{
