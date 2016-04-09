@@ -750,8 +750,11 @@ function showPointPicker(location) {
 		// replace estimates in card title
 		$text[0].value=text.match(reg)?text.replace(reg, '{'+value+'} '):'{'+value+'} ' + text;
 
-		// then click our button so it all gets saved away
+		// in old-textarea method, click our button so it all gets saved away
 		$(".card-detail-title .edit .js-save-edit").click();
+		// in new-textarea method, have to do a few actions to get it to save after we click away from the card
+		$('textarea.js-card-detail-title-input').click();
+		$('textarea.js-card-detail-title-input').focus();
 
 		return false;
 	}));
@@ -772,8 +775,11 @@ function showPointPicker(location) {
 		// replace consumed value in card title
 		$text[0].value=text.match(regC)?text.replace(regC, ' |'+value+'|'):text + ' |'+value+'|';
 
-		// then click our button so it all gets saved away
+		// in old-textarea method, click our button so it all gets saved away
 		$(".card-detail-title .edit .js-save-edit").click();
+		// in new-textarea method, have to do a few actions to get it to save after we click away from the card
+		$('textarea.js-card-detail-title-input').click();
+		$('textarea.js-card-detail-title-input').focus();
 
 		return false;
 	}));
