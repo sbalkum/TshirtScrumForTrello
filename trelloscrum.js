@@ -620,7 +620,7 @@ function ListCard(el, identifier){
 		clearTimeout(to);
 
 		to = setTimeout(function(){
-			var $title=$card.find('a.list-card-title');
+			var $title=$card.find('.list-card-details .list-card-title');
 			if(!$title[0])return;
 			// This expression gets the right value whether Trello has the card-number span in the DOM or not (they recently removed it and added it back).
 			var titleTextContent = (($title[0].childNodes.length > 1) ? $title[0].childNodes[$title[0].childNodes.length-1].textContent : $title[0].textContent);
@@ -788,7 +788,7 @@ function showPointPicker(location) {
 
 //for export
 var $excel_btn,$excel_dl;
-window.URL = window.webkitURL || window.URL;
+window.URL = window.URL;
 
 function checkExport() {
 	if($excel_btn && $excel_btn.filter(':visible').length) return;
